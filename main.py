@@ -22,7 +22,7 @@ def reset_all_states():
     st.session_state.step = 1
 
 
-def criar_pdf(operation, observation, uploaded_files, doc_checks):
+def criar_pdf(operation, observation, uploaded_files, doc_checks, responsible_name):
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=A4)
     styles = getSampleStyleSheet()
@@ -66,6 +66,10 @@ def criar_pdf(operation, observation, uploaded_files, doc_checks):
     
     story.append(Spacer(1, 20))
     story.append(Paragraph("✓ Usuário confirmou ciência da responsabilidade pela conferência dos itens.", styles['Normal']))
+    
+    # Adicionar nome do responsável
+    story.append(Spacer(1, 10))
+    story.append(Paragraph(f"Responsável pela verificação: {responsible_name}", styles['Normal']))
     story.append(Spacer(1, 30))
 
     # Adicionar documentos
@@ -181,7 +185,7 @@ def main():
             st.rerun()
             
     # Passo 2: Verificação do documento
-# Passo 2: Verificação do documento
+
     elif st.session_state.step == 2:
         st.header("2º Passo: Verificação do Documento")
         
@@ -192,6 +196,8 @@ def main():
             st.session_state.doc_dated = False
         if 'all_attachments' not in st.session_state:
             st.session_state.all_attachments = False
+        if 'responsible_name' not in st.session_state:
+            st.session_state.responsible_name = ""
         
         # Checkboxes não obrigatórias
         st.session_state.doc_signed = st.checkbox(
@@ -219,6 +225,13 @@ def main():
             key='responsibility_check'
         )
         
+        # Campo para nome do responsável
+        st.session_state.responsible_name = st.text_input(
+            "Nome do responsável:",
+            value=st.session_state.responsible_name,
+            key='responsible_name_input'
+        )
+        
         if st.button("Voltar"):
             st.session_state.step = 1
             st.rerun()
@@ -226,6 +239,10 @@ def main():
         if st.button("Próximo"):
             if not responsibility_check:
                 st.error("Você precisa confirmar que está ciente da sua responsabilidade para prosseguir.")
+                return
+            
+            if not st.session_state.responsible_name.strip():
+                st.error("Por favor, preencha o nome do responsável.")
                 return
                 
             st.session_state.step = 3
@@ -266,7 +283,8 @@ def main():
                         st.session_state.operation,
                         st.session_state.observation,
                         uploaded_files,
-                        doc_checks
+                        doc_checks,
+                        st.session_state.responsible_name
                     )
                     
                     # Enviar email
