@@ -108,7 +108,7 @@ def criar_pdf(operation, observation, uploaded_files, doc_checks):
 def enviar_email(pdf_buffer, operation, observation=""):
     remetente = "cadastrotmt@gmail.com"
     senha = "qptm rgbz dzpr wdhk"
-    destinatario = "jonathan.cabral@tmtlog.com" 
+    destinatario = "beatriz.campos@tmtlog.com" 
 
     msg = MIMEMultipart()
     msg['From'] = remetente
