@@ -22,7 +22,7 @@ def reset_all_states():
     st.session_state.step = 1
 
 
-def criar_pdf(operation, observation, uploaded_files):
+def criar_pdf(operation, observation, uploaded_files, doc_checks):
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=A4)
     styles = getSampleStyleSheet()
@@ -49,7 +49,29 @@ def criar_pdf(operation, observation, uploaded_files):
     story.append(Paragraph(f"Data/Hora: {current_time}", styles['Normal']))
     story.append(Spacer(1, 30))
 
+    # Adicionar seção de verificações
+    story.append(Paragraph("Verificações realizadas:", styles['Heading2']))
+    story.append(Spacer(1, 10))
+    
+    # Lista de verificações
+    verificacoes = [
+        ("O documento está assinado?", doc_checks['doc_signed']),
+        ("O documento está datado?", doc_checks['doc_dated']),
+        ("Todos os comprovantes relacionados à carga estão em anexo?", doc_checks['all_attachments'])
+    ]
+    
+    for descricao, status in verificacoes:
+        status_text = "✓ Sim" if status else "✗ Não"
+        story.append(Paragraph(f"• {descricao} {status_text}", styles['Normal']))
+    
+    story.append(Spacer(1, 20))
+    story.append(Paragraph("✓ Usuário confirmou ciência da responsabilidade pela conferência dos itens.", styles['Normal']))
+    story.append(Spacer(1, 30))
+
     # Adicionar documentos
+    story.append(Paragraph("Documentos anexados:", styles['Heading2']))
+    story.append(Spacer(1, 10))
+    
     for uploaded_file in uploaded_files:
         # Adicionar nome do arquivo
         story.append(Paragraph(f"Documento: {uploaded_file.name}", styles['Heading2']))
@@ -86,7 +108,7 @@ def criar_pdf(operation, observation, uploaded_files):
 def enviar_email(pdf_buffer, operation, observation=""):
     remetente = "cadastrotmt@gmail.com"
     senha = "qptm rgbz dzpr wdhk"
-    destinatario = "beatriz.campos@tmtlog.com" 
+    destinatario = "jonathan.cabral@tmtlog.com" 
 
     msg = MIMEMultipart()
     msg['From'] = remetente
@@ -159,26 +181,58 @@ def main():
             st.rerun()
             
     # Passo 2: Verificação do documento
+# Passo 2: Verificação do documento
     elif st.session_state.step == 2:
         st.header("2º Passo: Verificação do Documento")
         
-        doc_signed = st.checkbox("O documento está assinado?", key='doc_signed')
-        doc_dated = st.checkbox("O documento está datado?", key='doc_dated')
-        all_attachments = st.checkbox("Todos os comprovantes relacionados à carga estão em anexo?", key='all_attachments')
+        # Inicializar os valores na session_state se não existirem
+        if 'doc_signed' not in st.session_state:
+            st.session_state.doc_signed = False
+        if 'doc_dated' not in st.session_state:
+            st.session_state.doc_dated = False
+        if 'all_attachments' not in st.session_state:
+            st.session_state.all_attachments = False
+        
+        # Checkboxes não obrigatórias
+        st.session_state.doc_signed = st.checkbox(
+            "O documento está assinado?",
+            value=st.session_state.doc_signed,
+            key='doc_signed_checkbox'
+        )
+        st.session_state.doc_dated = st.checkbox(
+            "O documento está datado?",
+            value=st.session_state.doc_dated,
+            key='doc_dated_checkbox'
+        )
+        st.session_state.all_attachments = st.checkbox(
+            "Todos os comprovantes relacionados à carga estão em anexo?",
+            value=st.session_state.all_attachments,
+            key='all_attachments_checkbox'
+        )
+        
+        # Adiciona espaço entre os grupos de checkboxes
+        st.markdown("---")
+        
+        # Nova checkbox obrigatória de responsabilidade
+        responsibility_check = st.checkbox(
+            "Estou ciente que é de minha responsabilidade conferir os itens acima.",
+            key='responsibility_check'
+        )
         
         if st.button("Voltar"):
             st.session_state.step = 1
             st.rerun()
             
         if st.button("Próximo"):
-            if not (doc_signed and doc_dated and all_attachments):
-                st.error("Todos os itens devem ser confirmados antes de prosseguir.")
+            if not responsibility_check:
+                st.error("Você precisa confirmar que está ciente da sua responsabilidade para prosseguir.")
                 return
                 
             st.session_state.step = 3
             st.rerun()
             
     # Passo 3: Upload e envio
+
     elif st.session_state.step == 3:
         st.header("3º Passo: Anexar e Enviar Documentos")
         
@@ -200,11 +254,19 @@ def main():
             
             try:
                 with st.spinner("Processando documentos e enviando email..."):
+                    # Criar dicionário com o status das verificações
+                    doc_checks = {
+                        'doc_signed': st.session_state.doc_signed,
+                        'doc_dated': st.session_state.doc_dated,
+                        'all_attachments': st.session_state.all_attachments
+                    }
+                    
                     # Criar PDF
                     pdf_buffer = criar_pdf(
                         st.session_state.operation,
                         st.session_state.observation,
-                        uploaded_files
+                        uploaded_files,
+                        doc_checks
                     )
                     
                     # Enviar email
