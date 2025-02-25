@@ -35,7 +35,7 @@ def criar_pdf(operation, observation, uploaded_files, doc_checks, responsible_na
         fontSize=24,
         spaceAfter=30
     )
-    story.append(Paragraph("Controle de Documentos", title_style))
+    story.append(Paragraph("COMPROVAÇÃO DE ENTREGA", title_style))
     
     # Informações da operação
     operation_text = f"Operação: {operation}"
@@ -119,7 +119,7 @@ def enviar_email(pdf_buffer, operation, observation=""):
     msg['To'] = destinatario
     
     # Assunto do email com o nome da operação
-    assunto = f"CONTROLE DE DOCUMENTOS - {operation}"
+    assunto = f"COMPROVAÇÃO DE ENTREGA - {operation}"
     if observation:
         assunto += f" - {observation}"
     msg['Subject'] = assunto
@@ -391,7 +391,7 @@ def main():
 
 if __name__ == "__main__":
     st.set_page_config(
-        page_title="Controle de Documentos",
+        page_title="Comprovação de entrega",
         layout="wide",
         page_icon="📄"
     )
