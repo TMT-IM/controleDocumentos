@@ -35,7 +35,7 @@ def criar_pdf(operation, observation, uploaded_files, doc_checks, responsible_na
         fontSize=24,
         spaceAfter=30
     )
-    story.append(Paragraph("COMPROVAÇÃO DE ENTREGA", title_style))
+    story.append(Paragraph("Controle de Documentos", title_style))
     
     # Informações da operação
     operation_text = f"Operação: {operation}"
@@ -322,7 +322,7 @@ def main():
 
 if __name__ == "__main__":
     st.set_page_config(
-        page_title="COMPROVAÇÃO DE ENTREGA",
+        page_title="Controle de Documentos",
         layout="wide",
         page_icon="📄"
     )
