@@ -212,6 +212,7 @@ def main():
                     st.rerun()
             
     # Passo 2: Verificação do documento
+
     elif st.session_state.step == 2:
         st.header("2º Passo: Verificação do Documento")
         
@@ -282,6 +283,7 @@ def main():
                     st.rerun()
             
     # Passo 3: Upload e envio
+
     elif st.session_state.step == 3:
         st.header("3º Passo: Anexar e Enviar Documentos")
         
