@@ -322,7 +322,7 @@ def main():
 
 if __name__ == "__main__":
     st.set_page_config(
-        page_title="Controle de Documentos",
+        page_title="Comprovação de entrega",
         layout="wide",
         page_icon="📄"
     )
