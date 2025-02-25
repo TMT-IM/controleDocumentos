@@ -1,0 +1,231 @@
+/* Estilos gerais */
+.main {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Estilizando o título principal */
+h1 {
+    color: var(--text-color);
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--primary-color);
+    margin-bottom: 2rem;
+    font-weight: 700;
+    font-size: 2.5rem;
+}
+
+/* Estilizando cabeçalhos de etapas */
+h2, h3 {
+    color: var(--primary-color);
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+/* Estilização para a seleção de operação */
+div[data-testid="stSelectbox"] {
+    margin-bottom: 1.5rem;
+}
+
+/* Estilização para grupos de checkboxes */
+div[data-testid="stCheckbox"] {
+    background-color: var(--background-color-transparent);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-left: 3px solid var(--primary-color);
+}
+
+/* Estilização específica para os checkboxes no tema escuro */
+[data-theme="dark"] div[data-testid="stCheckbox"] label {
+    color: white !important;
+}
+
+/* Estilização para o checkbox em si no tema escuro */
+[data-theme="dark"] div[data-testid="stCheckbox"] input[type="checkbox"] + div {
+    background-color: rgba(70, 70, 70, 0.8) !important;
+    border-color: var(--primary-color) !important;
+}
+
+/* Estilização para o checkbox quando marcado no tema escuro */
+[data-theme="dark"] div[data-testid="stCheckbox"] input[type="checkbox"]:checked + div {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+/* Estilização para o input de texto */
+div[data-testid="stTextInput"] input {
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid var(--secondary-background-color);
+}
+
+/* Estilização para o file uploader */
+.uploadedFile {
+    background-color: var(--background-color-transparent);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Estilização para botões */
+.stButton > button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.stButton > button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Botão voltar */
+.stButton:nth-of-type(1) > button {
+    background-color: var(--secondary-background-color);
+    color: var(--text-color);
+}
+
+/* Botão primário */
+button[kind="primary"] {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Estilização para mensagens */
+div[data-baseweb="notification"] {
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Estilização para o divisor */
+hr {
+    margin: 2rem 0;
+    border-color: var(--secondary-background-color);
+}
+
+/* Área de resumo após envio */
+.success-message {
+    background-color: rgba(77, 175, 124, 0.1);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    border-left: 5px solid #4daf7c;
+    margin: 2rem 0;
+}
+
+/* Versão tema escuro para área de sucesso */
+[data-theme="dark"] .success-message {
+    background-color: rgba(77, 175, 124, 0.2);
+    border-left: 5px solid #4daf7c;
+}
+
+/* Melhor contraste para mensagens de erro no tema escuro */
+[data-theme="dark"] div[data-baseweb="notification"][kind="error"] {
+    background-color: rgba(255, 76, 76, 0.2);
+}
+
+/* Container para os detalhes do resumo */
+.detail-container {
+    background-color: var(--background-color-transparent);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* Estilos responsivos */
+@media screen and (max-width: 768px) {
+    .main {
+        padding: 1rem;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+/* Variáveis de cores para temas claro e escuro */
+:root {
+    --primary-color: #4285F4;
+    --text-color: rgb(49, 51, 63);
+    --background-color-transparent: rgba(237, 242, 247, 0.7);
+    --secondary-background-color: #f0f2f6;
+}
+
+/* Estilos para tema escuro */
+[data-theme="dark"] {
+    --primary-color: #6ea4ff;
+    --text-color: rgb(250, 250, 250);
+    --background-color-transparent: rgba(55, 60, 70, 0.7);
+    --secondary-background-color: #2e3035;
+}
+
+/* Animações e efeitos */
+.stButton > button {
+    position: relative;
+    overflow: hidden;
+}
+
+.stButton > button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.stButton > button:hover::after {
+    animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(20, 20);
+        opacity: 0;
+    }
+}
+
+/* Estilização especial para o checkbox de responsabilidade */
+div[data-testid="stCheckbox"]:has(input#responsibility_check) {
+    background-color: rgba(255, 229, 163, 0.2);
+    border-left: 3px solid #ffd166;
+    font-weight: 600;
+}
+
+/* Versão de tema escuro para o checkbox de responsabilidade */
+[data-theme="dark"] div[data-testid="stCheckbox"]:has(input#responsibility_check) {
+    background-color: rgba(255, 204, 0, 0.15);
+    border-left: 3px solid #ffc700;
+}
+
+/* Estilização para os cards de documentos enviados */
+.file-card {
+    background-color: var(--background-color-transparent);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    border-left: 3px solid var(--primary-color);
+}
+
+.file-icon {
+    margin-right: 1rem;
+    color: var(--primary-color);
+}

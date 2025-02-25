@@ -1,0 +1,17 @@
+[theme]
+# Tema principal
+primaryColor = "#4285F4"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F0F2F6"
+textColor = "#31333F"
+font = "sans serif"
+
+# Opções gerais
+[server]
+enableStaticServing = true
+
+[browser]
+gatherUsageStats = false
+
+[global]
+showWarningOnDirectExecution = false
